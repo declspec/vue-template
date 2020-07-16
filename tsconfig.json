@@ -7,10 +7,6 @@
         "noImplicitAny": true,
         "experimentalDecorators": true,
         "moduleResolution": "node",
-        "types": [
-            "core-js",
-            "applicationinsights-js"
-        ],
         "baseUrl": "./src",
         "target": "es5",
         "module": "esnext",

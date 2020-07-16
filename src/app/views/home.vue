@@ -1,6 +1,7 @@
 <template>
     <div>
-        <heading message="Welcome to the app"></heading>
+        <counter label="Click me" />
+        <counter label="Don't click me" />
     </div>
 </template>
 
@@ -9,11 +10,11 @@
     import { Component } from 'vue-property-decorator'
 
     // Components used by this view.
-    import Heading from 'app/components/heading.vue';
+    import Counter from 'app/components/counter.vue';
 
     @Component({
         components: {
-            Heading
+            Counter
         }
     })
     export default class HomeView extends Vue {
