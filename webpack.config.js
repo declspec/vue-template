@@ -11,7 +11,7 @@ module.exports = wrap(function(_env) {
     const env = Object.assign({}, process.env, _env);
     const environment = (env.NODE_ENV || 'development').toLowerCase();
     const packagePath = (env.PACKAGE_PATH || 'latest');
-    const envConfig = createEnvironment(environment);
+    const envConfig = createEnvironment(environment, env.noOverrides);
 
     const config = {
         node: false,
@@ -24,26 +24,22 @@ module.exports = wrap(function(_env) {
             filename: `${packagePath}/[name].js`,
             chunkFilename: getAssetFilename('js'),
             path: path.resolve(__dirname, 'dist'),
-            publicPath: `${envConfig.urls.cdn}/`,
+            publicPath: `${envConfig.urls.baseHref}/`,
             libraryTarget: 'umd'
         },
         resolve: {
             extensions: ['.js', '.tsx', '.ts', '.vue'],
-            modules: [path.resolve('./src'), 'node_modules']
-        },
-        devServer: {
-            headers: {
-                'Access-Control-Allow-Origin': '*'
-            }
+            modules: [ path.resolve('./src'), 'node_modules' ]
         },
         optimization: {
+            // Split each npm module into its own file, allowing the browser to cache each dependency independently
+            // Combine this with a [contenthash] in the filename and you can enforce a very aggressive caching strategy.
             splitChunks: {
-                chunks: 'async',
+                chunks: 'all',
                 maxInitialRequests: Infinity,
                 minSize: 0,
                 cacheGroups: {
-                    // Split each npm module into its own file, allowing the browser to cache each dependency independently
-                    // Combine this with a [contenthash] in the filename and you can enforce a very aggressive caching strategy.
+
                     vendors: {
                         test: /[\\/]node_modules[\\/]/,
                         name(module) {
@@ -56,7 +52,9 @@ module.exports = wrap(function(_env) {
             }
         },
         module: {
-            rules: [{
+            rules: [
+                // Sass / CSS file handling
+                {
                     test: /\.s?css$/,
                     use: [
                         MiniCssExtractPlugin.loader,
@@ -65,10 +63,12 @@ module.exports = wrap(function(_env) {
                         'sass-loader'
                     ]
                 },
+                // Vue file handling
                 {
                     test: /\.vue$/,
                     loader: 'vue-loader'
                 },
+                // TypeScript file handling
                 {
                     test: /\.tsx?$/,
                     exclude: /[\/\\](node_modules|tests)[\/\\]/,
@@ -87,12 +87,13 @@ module.exports = wrap(function(_env) {
             new webpack.DefinePlugin({ 'ENV': JSON.stringify(envConfig) }),
             new MiniCssExtractPlugin({ filename: getAssetFilename('css') }),
             new VueLoaderPlugin(),
+            // Generate the index page with all the required chunkks injected automatically.
             new HtmlWebpackPlugin({
                 filename: 'index.html',
                 inject: true,
+                title: 'Vue Webpack Template',
                 chunks: ['app'],
-                template: './src/app/index.template.html',
-                env: envConfig
+                template: './src/app/index.template.html'
             })
         ]
     };

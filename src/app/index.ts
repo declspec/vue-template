@@ -1,12 +1,17 @@
-// ensure the styling gets bundled.
-import 'app/styling/layout.scss';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-(async () => {
-    const { default: Vue } = await import('vue');
-    const { default: HomeView } = await import('app/views/home.vue');
+import Routes from 'app/config/routes';
+import Layout from 'app/layout.vue';
 
-    return new Vue({
-        el: '#app',
-        render: r => r(HomeView)
-    });
-})();
+import 'app/styles/main.scss';
+
+Vue.use(VueRouter);
+
+const vm = new Vue({
+    el: '#app',
+    render: r => r(Layout),
+    router: new VueRouter({
+        routes: Routes
+    }),
+});

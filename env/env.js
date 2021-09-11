@@ -1,6 +1,6 @@
 const Environment = {
     urls: {
-        cdn: ''
+        baseHref: ''
     }
 };
 

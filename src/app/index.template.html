@@ -2,13 +2,12 @@
 <html lang="en">
     <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-        <base href="/" />
-        <title>Vue Template</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes"/>
+        <title><%- htmlWebpackPlugin.options.title %></title>
     </head>
     <body>
         <div id="app"></div>
-        <% /* Include bare-minimum polyfills from polyfill.io which browser-sniffs to only download the missing functionality */ %>
+        <% /* Include bare-minimum polyfills from polyfill.io which sniffs the browser to only download the missing functionality */ %>
         <script src="https://polyfill.io/v3/polyfill.min.js?features=Promise%2CPromise.prototype.finally%2CArray.prototype.find%2CArray.prototype.findIndex%2Cfetch%2CObject.assign"></script>
     </body>
 </html>
